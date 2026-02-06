@@ -8,9 +8,11 @@ class Settings(BaseSettings):
     llm_model_name:str = ""
     llm_base_url:str = ""
     llm_api_key:str = ""
+    # Wolfram Setting
+    wolfram_app_id:str = ""
 
     model_config = SettingsConfigDict(
-        env_file="cirno_math_and_science_agent.env",
+        env_file="../cirno_math_and_science_agent.env",
         env_file_encoding="utf-8",
         extra="allow",
     )
