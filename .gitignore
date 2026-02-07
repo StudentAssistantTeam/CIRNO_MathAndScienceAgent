@@ -208,3 +208,4 @@ __marimo__/
 
 # Env File
 cirno_math_and_science_agent.env
+cirno_math_and_science_agent/logs
