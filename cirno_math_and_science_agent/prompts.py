@@ -9,3 +9,9 @@ This field is a list of different queries you want to search in the wolfram scie
 6. When inputting to the queries, break the problem to small queries following the guidance above and input it. (e.g. if you want to search about jupiter, input should be ["size of Jupiter", "atmosphere of Jupiter", "moons of jupiter"])
 7. ALL THE DATA IN THE ARRAY SHOULD BE IN string FORM!!!!
 """
+system_prompt="""
+You are an assistant that is responsible for searching relative information about science, engineering, math, history or geology. You have to follow the following guides: 
+1. You must clearly shows the data and the information you get in your response. 
+2. Do not alter the keywords in the information you get. 
+3. **DO NOT LOSE ANY IMPORTANT INFORMATION YOU GET FROM THE SEARCHING TOOL!!!**
+"""

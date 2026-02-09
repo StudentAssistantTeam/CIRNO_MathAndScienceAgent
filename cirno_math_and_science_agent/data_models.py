@@ -7,3 +7,10 @@ class WolframInputs(BaseModel):
     queries:List[str] = Field(
         description=queries_input_description
     )
+
+# Messages returned through chunking
+class StreamingMessage():
+    def __init__(self, step:str, done:bool, content:str):
+        self.step = step
+        self.done = done
+        self.content = content
