@@ -31,15 +31,17 @@ class agent():
         message = {"messages": messages}
         result = asyncio.run(self.agent.ainvoke(message))
         return result
-    async def streaming(self, query:str) -> AsyncGenerator[StreamingMessage, None]:
+    async def streaming(self, query: str, context_id: str) -> AsyncGenerator[StreamingMessage, None]:
         try:
+            # Configuration
+            config = {'configurable': {'thread_id': context_id}}
             # Setting messages
             messages = [SystemMessage(content=system_prompt)]
             messages.append(HumanMessage(content=query))
             message = {"messages": messages}
             messages_recorded = []
             # Streaming Response
-            async for chunk in self.agent.astream(message):
+            async for chunk in self.agent.astream(message, config=config):
                 for step, data in chunk.items():
                     if(step=="model"):
                         messages_recorded.append(data['messages'][0].content)
@@ -64,7 +66,7 @@ class agent():
 if __name__=="__main__":
     logger_config.setup_logging()
     Agent = agent()
-    iterer = Agent.streaming(query="Find me the information about mars")
+    iterer = Agent.streaming(query="Find me the information about mars", context_id = "114514")
     async def itering():
         async for i in iterer:
             if(i.step=="model" or i.step=="finish"):
