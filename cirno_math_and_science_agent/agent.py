@@ -37,9 +37,12 @@ class agent():
             messages = [SystemMessage(content=system_prompt)]
             messages.append(HumanMessage(content=query))
             message = {"messages": messages}
+            messages_recorded = []
             # Streaming Response
             async for chunk in self.agent.astream(message):
                 for step, data in chunk.items():
+                    if(step=="model"):
+                        messages_recorded.append(data['messages'][0].content)
                     yield StreamingMessage(
                         step = step,
                         content = data['messages'][0].content,
@@ -47,7 +50,7 @@ class agent():
                     )
             yield StreamingMessage(
                 step = "finish",
-                content = "\n",
+                content = messages_recorded[len(messages_recorded)-1],
                 done = True
             )
         except Exception as e:
@@ -64,6 +67,6 @@ if __name__=="__main__":
     iterer = Agent.streaming(query="Find me the information about mars")
     async def itering():
         async for i in iterer:
-            if(i.step=="model"):
+            if(i.step=="model" or i.step=="finish"):
                 print(i.content)
     asyncio.run(itering())
