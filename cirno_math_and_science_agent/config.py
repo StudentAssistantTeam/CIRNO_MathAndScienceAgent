@@ -1,5 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE_PATH = BASE_DIR / "cirno_math_and_science_agent.env"
 # Settings
 class Settings(BaseSettings):
     # a2a config
@@ -13,7 +16,7 @@ class Settings(BaseSettings):
     wolfram_app_id:str = ""
 
     model_config = SettingsConfigDict(
-        env_file="../cirno_math_and_science_agent.env",
+        env_file=ENV_FILE_PATH,
         env_file_encoding="utf-8",
         extra="allow",
     )
