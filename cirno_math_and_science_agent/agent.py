@@ -66,7 +66,7 @@ class agent():
 if __name__=="__main__":
     logger_config.setup_logging()
     Agent = agent()
-    iterer = Agent.streaming(query="Find me the information about mars", context_id = "114514")
+    iterer = Agent.streaming(query="Find me the information about France", context_id = "114514")
     async def itering():
         async for i in iterer:
             if(i.step=="model" or i.step=="finish"):

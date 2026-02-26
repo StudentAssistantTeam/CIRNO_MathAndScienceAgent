@@ -1,12 +1,14 @@
 from pydantic import BaseModel, Field
 from typing import List
-from cirno_math_and_science_agent.prompts import queries_input_description
+from cirno_math_and_science_agent.prompts import (
+    math_and_science_searcher_queries_input_description
+)
 import uuid
 
 # Standard for the input of the wolfram tool
 class WolframInputs(BaseModel):
     queries:List[str] = Field(
-        description=queries_input_description
+        description=math_and_science_searcher_queries_input_description
     )
 
 # Messages returned through chunking

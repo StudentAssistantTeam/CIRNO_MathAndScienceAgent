@@ -1,5 +1,5 @@
-# The prompts for the agent.
-queries_input_description = """
+# The prompts for the tool.
+math_and_science_searcher_queries_input_description = """
 This field is a list of different queries you want to search in the wolfram science knowledge base, follow the following rules: 
 1. Send queries in English only; translate non-English queries before sending, then respond in the original language.
 2. ALWAYS use this exponent notation: `6*10^14`, NEVER `6e14`
@@ -9,6 +9,12 @@ This field is a list of different queries you want to search in the wolfram scie
 6. When inputting to the queries, break the problem to small queries following the guidance above and input it. (e.g. if you want to search about jupiter, input should be ["size of Jupiter", "atmosphere of Jupiter", "moons of jupiter"])
 7. ALL THE DATA IN THE ARRAY SHOULD BE IN string FORM!!!!
 """
+math_and_science_searcher_description = """
+The tool that allows you to search for information in science, math, engineering, history or geology. 
+Also, you are allowed to carry out calculations here. 
+**Real-time data can be provided here.**
+"""
+# The prompts for the agent
 system_prompt="""
 You are an assistant that is responsible for searching relative information about science, engineering, math, history or geology. You have to follow the following guides: 
 1. You must clearly shows the data and the information you get in your response. 

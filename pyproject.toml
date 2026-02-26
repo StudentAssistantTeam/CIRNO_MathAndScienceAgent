@@ -17,3 +17,6 @@ dependencies = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[project.scripts]
+science_and_math_agent_app = "cirno_math_and_science_agent.__main__:run"

@@ -3,11 +3,14 @@ from typing import List
 import asyncio
 from cirno_math_and_science_agent.request_wolfram import get_answer
 from cirno_math_and_science_agent.data_models import *
+from cirno_math_and_science_agent.prompts import (
+    math_and_science_searcher_description
+)
 import logging
 
 logger = logging.getLogger("Tool-Math&Science")
 # The tool for getting the info from wolfram
-@tool("math_and_science_searcher", args_schema=WolframInputs, description="The tool that allows you to search for information in science, math, engineering, history or geology. Real-time data can be provided.")
+@tool("math_and_science_searcher", args_schema=WolframInputs, description=math_and_science_searcher_description)
 async def search_math_and_science_info(queries:List[str]) -> str:
     # store the results for the answer.
     results = []

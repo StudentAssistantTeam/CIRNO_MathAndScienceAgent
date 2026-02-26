@@ -5,14 +5,14 @@ import asyncio
 import logging
 
 logger = logging.getLogger("Wolfram Requests")
-# 获取需要的数据
+# Get information needed
 async def get_answer(query: str) -> Dict[str,str]:
-    # 设置参数
+    # params setting
     params = {
         'appid': settings.wolfram_app_id,
         'input': query
     }
-    # 异步请求
+    # Async request
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url="https://www.wolframalpha.com/api/v1/llm-api",params=params,timeout=30)
@@ -23,6 +23,7 @@ async def get_answer(query: str) -> Dict[str,str]:
             "result":result
         }
     except Exception as e:
+        # Error processing
         logger.error(f"Request failed due to {e}")
         return {
             "topic":query,
