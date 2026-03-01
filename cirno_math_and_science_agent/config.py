@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     llm_api_key:str = ""
     # Wolfram Setting
     wolfram_app_id:str = ""
+    # OpenAlex Setting
+    openalex_api:str = ""
 
     model_config = SettingsConfigDict(
         env_file=ENV_FILE_PATH,
