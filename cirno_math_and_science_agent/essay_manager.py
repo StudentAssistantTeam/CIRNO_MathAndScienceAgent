@@ -1,8 +1,10 @@
 from cirno_math_and_science_agent.config import settings
+from cirno_math_and_science_agent.prompts import summarize_prompt
 import logging
 import fitz
 import re
 import httpx
+import litellm
 
 logger = logging.getLogger("essay_manager")
 # Load PDF
@@ -71,3 +73,22 @@ async def get_essay_info(query: str, number: int):
             "success": False,
             "error": f"search failed due to {e}"
         }
+# Request LLM for essay summary
+async def request_llm4summary(pages, title: str):
+    try:
+        # Get response from the llm
+        response = await litellm.acompletion(
+            model=settings.llm_model_name,
+            base_url=settings.llm_base_url,
+            api_key=settings.llm_api_key,
+            messages=[{
+                "role": "user",
+                "content":summarize_prompt+f"\n## {title}\n"+"".join([
+                    f"\n\n**=====Page{i+1}=====**\n\n{content}" for i,content in enumerate(pages)
+                ])
+            }]
+        )
+    except Exception as e:
+        logger.error(f"Request failed due to {e}")
+        response = f"Cannot get this response due to {e}, try again later!"
+    return response

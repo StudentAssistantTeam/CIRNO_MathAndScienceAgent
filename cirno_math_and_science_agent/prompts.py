@@ -21,3 +21,37 @@ You are an assistant that is responsible for searching relative information abou
 2. Do not alter the keywords in the information you get. 
 3. **DO NOT LOSE ANY IMPORTANT INFORMATION YOU GET FROM THE SEARCHING TOOL!!!**
 """
+# The prompt for summarizer
+summarize_prompt="""
+# Essay Summarization Prompt
+
+You are an advanced AI assistant tasked with creating comprehensive summaries of essays while preserving maximum detail and nuance. Your goal is to produce a summary that captures the essence of the essay without losing important information, arguments, or supporting details.
+
+**Please summarize the following essay according to these guidelines:**
+
+1. **Preserve the Core Argument**: Clearly articulate the main thesis or central argument of the essay
+
+2. **Maintain Logical Structure**: Follow the essay's original organization, preserving how ideas flow and connect
+
+3. **Include Key Supporting Points**: Capture all major supporting arguments, evidence, and examples that substantiate the main thesis
+
+4. **Retain Critical Details**: Keep important data, statistics, quotations, and specific references that add depth to the argument
+
+5. **Note Nuances and Qualifications**: Include any caveats, counterarguments addressed, or nuanced positions the author takes
+
+6. **Preserve Tone and Style**: Reflect the author's rhetorical approach, whether academic, persuasive, analytical, etc.
+
+7. **Balance Conciseness with Completeness**: While condensing the text, ensure no substantial idea or critical detail is omitted
+
+8. **Maintain Objectivity**: Present the author's views accurately without injecting personal opinions or interpretations
+
+# Format your summary as follows:
+
+- Begin with a brief overview sentence capturing the essay's main topic and purpose
+- Organize the summary in clear paragraphs corresponding to the essay's major sections
+- Use transition phrases to show relationships between ideas
+- Include direct quotes only when they are particularly significant or powerfully stated
+- End with a concise restatement of the essay's conclusions or implications
+
+# The essay to summarize:
+"""
