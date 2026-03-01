@@ -5,6 +5,8 @@ import fitz
 import re
 import httpx
 import litellm
+import tempfile
+import os
 
 logger = logging.getLogger("essay_manager")
 # Load PDF
@@ -92,3 +94,48 @@ async def request_llm4summary(pages, title: str):
         logger.error(f"Request failed due to {e}")
         response = f"Cannot get this response due to {e}, try again later!"
     return response
+# Essay downloader
+class essay_downloader:
+    # Initialize the downloader: Get file id
+    def __init__(self, file_id: str):
+        self.id = file_id
+        self.temp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+    # Get file name
+    def get_name(self):
+        return self.temp_file.name
+    # Delete temp file
+    def delete(self):
+        logger.info(f"Start deleting file {self.temp_file.name}")
+        os.unlink(self.temp_file.name)
+    # Download
+    async def download(self):
+        params = {
+            "api_key": settings.openalex_api
+        }
+        url = f"https://content.openalex.org/works/{self.id}.pdf"
+        logger.info(f"Start downloading file {self.id}")
+        async with httpx.AsyncClient() as client:
+            try:
+                # Streaming download
+                async with client.stream("GET", url=url, params=params, follow_redirects=True, timeout=60) as responses:
+                    if responses.status_code != 200:
+                        return {
+                            "success": False,
+                            "reason": f"Download failed due to {responses.status_code}"
+                        }
+                    else:
+                        async for chunk in responses.aiter_bytes():
+                            self.temp_file.write(chunk)
+                        self.temp_file.flush()
+                        self.temp_file.close()
+                        return {
+                            "success": True,
+                            "path": self.temp_file.name
+                        }
+            except Exception as e:
+                logger.info(f"File download failed due to {e}")
+                # Error handling
+                return {
+                    "success": False,
+                    "reason": f"Download failed due to {e}"
+                }
