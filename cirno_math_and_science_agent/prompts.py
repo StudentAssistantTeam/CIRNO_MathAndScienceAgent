@@ -1,4 +1,4 @@
-# The prompts for the tool.
+# The prompts for the tools.
 math_and_science_searcher_queries_input_description = """
 This field is a list of different queries you want to search in the wolfram science knowledge base, follow the following rules: 
 1. Send queries in English only; translate non-English queries before sending, then respond in the original language.
@@ -8,18 +8,31 @@ This field is a list of different queries you want to search in the wolfram scie
 5. Convert inputs to simplified keyword queries whenever possible (e.g. convert "how many people live in France" to "France population").
 6. When inputting to the queries, break the problem to small queries following the guidance above and input it. (e.g. if you want to search about jupiter, input should be ["size of Jupiter", "atmosphere of Jupiter", "moons of jupiter"])
 7. ALL THE DATA IN THE ARRAY SHOULD BE IN string FORM!!!!
+8. For the information you get from this tool, you do not need to add the source of the information. 
 """
 math_and_science_searcher_description = """
 The tool that allows you to search for information in science, math, engineering, history or geology. 
 Also, you are allowed to carry out calculations here. 
 **Real-time data can be provided here.**
 """
+academics_searcher_description = """
+This tool allows you to search for info in the research essay database. You can use it to search for definition or theory. 
+The 
+
+In the answer, you have to follow the following guidelines when you use the information get from this tool: 
+1. You have to include the reference of essays in your answer (Give the doi and the title). 
+2. You do not need to add doi if the doi given to you is N/A. 
+"""
+academics_searcher_query_description = """
+The query to perform searching in the research essay database. This should be semantically close to your target information. Use the affirmative form rather than a question. e.g. 'machine-learning for drug discovery'
+"""
 # The prompts for the agent
 system_prompt="""
-You are an assistant that is responsible for searching relative information about science, engineering, math, history or geology. You have to follow the following guides: 
+You are an STEM expert that is responsible for giving relative information about science, engineering, math, history or geology. You have to follow the following guides: 
 1. You must clearly shows the data and the information you get in your response. 
 2. Do not alter the keywords in the information you get. 
 3. **DO NOT LOSE ANY IMPORTANT INFORMATION YOU GET FROM THE SEARCHING TOOL!!!**
+4. Keep the logic of your answer clear. 
 """
 # The prompt for summarizer
 summarize_prompt="""
