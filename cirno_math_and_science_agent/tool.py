@@ -1,6 +1,9 @@
 from langchain.tools import tool
 import asyncio
-from cirno_math_and_science_agent.essay_manager import get_essay_info
+from cirno_math_and_science_agent.essay_manager import (
+    get_essay_info,
+    essay_downloader
+)
 from cirno_math_and_science_agent.request_wolfram import get_answer
 from cirno_math_and_science_agent.data_models import *
 from cirno_math_and_science_agent.prompts import (
@@ -36,3 +39,19 @@ async def academics_searcher(query:str) -> str:
     logger.info("Start searching in research essay database...")
     # Essay info list
     essay_info = await get_essay_info(query=query, number=5)
+    # Process essay info
+    succeed_list = []
+    # Process essay list
+    if (essay_info["success"]):
+        for i in essay_info["results"]:
+            if "id" in i.keys() and "title" in i.keys():
+                tmp = {}
+                tmp["id"] = i["id"]
+                tmp["title"] = i["title"]
+                if "doi" in i.keys():
+                    tmp["doi"] = i["doi"]
+                else:
+                    tmp["doi"] = "N/A"
+                succeed_list.append(tmp)
+    # Processed list
+    processed_list = []

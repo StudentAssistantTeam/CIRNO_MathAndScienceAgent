@@ -7,6 +7,7 @@ import httpx
 import litellm
 import tempfile
 import os
+import asyncio
 
 logger = logging.getLogger("essay_manager")
 # Load PDF
@@ -138,4 +139,54 @@ class essay_downloader:
                 return {
                     "success": False,
                     "reason": f"Download failed due to {e}"
+                }
+# Essay processor
+class essay_processor:
+    def __init__(self, doi: str, id: str, essay_name: str):
+        self.essay_name = essay_name
+        self.doi = doi
+        self.downloader = essay_downloader(id)
+        self.downloaded = False
+        self.id = id
+    # Download
+    async def download(self):
+        result = await self.downloader.download()
+        if(result["success"]):
+            self.downloaded = True
+        return result
+    # Get summary
+    async def get_summary(self, remove_tmp_file:bool = True):
+        # Check whether the file is downloaded
+        if not self.downloaded:
+            return {
+                "success": False,
+                "reason": "File not downloaded"
+            }
+        else:
+            try:
+                loop = asyncio.get_event_loop()
+                # reader
+                def pdf_reader():
+                    return load_pdf(self.downloader.get_name())
+                results = await loop.run_in_executor(None, pdf_reader)
+                # Summarize
+                summary = await request_llm4summary(pages=results, title=self.essay_name)
+                # Remove temp files to save spaces.
+                if(remove_tmp_file):
+                    await loop.run_in_executor(None, self.downloader.delete)
+                return {
+                    "success": True,
+                    "summary": summary.choices[0].message.content,
+                    "doi": self.doi,
+                    "open_alex_id": self.id,
+                    "essay_name": self.essay_name
+                }
+            except Exception as e:
+                logger.error(f"Summary generation failed due to {e}")
+                # Remove file even if the summary generation failed
+                if (remove_tmp_file):
+                    await loop.run_in_executor(None, self.downloader.delete)
+                return {
+                    "success": False,
+                    "reason": str(e)
                 }
