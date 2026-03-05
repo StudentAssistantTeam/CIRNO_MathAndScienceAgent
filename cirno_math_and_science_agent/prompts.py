@@ -20,7 +20,7 @@ This tool allows you to search for info in the research essay database. You can 
 The 
 
 In the answer, you have to follow the following guidelines when you use the information get from this tool: 
-1. You have to include the reference of essays in your answer (Give the doi and the title). 
+1. You have to include the reference of essays in your answer (Give the **doi** and the **Title** of the essay (The result no. **SHOULD NOT BE** added as the user cannot see this index)). 
 2. You do not need to add doi if the doi given to you is N/A. 
 """
 academics_searcher_query_description = """
@@ -33,6 +33,7 @@ You are an STEM expert that is responsible for giving relative information about
 2. Do not alter the keywords in the information you get. 
 3. **DO NOT LOSE ANY IMPORTANT INFORMATION YOU GET FROM THE SEARCHING TOOL!!!**
 4. Keep the logic of your answer clear. 
+5. Answer the query in professional tone and make your answer as easy to understand as possible. 
 """
 # The prompt for summarizer
 summarize_prompt="""
@@ -68,3 +69,8 @@ You are an advanced AI assistant tasked with creating comprehensive summaries of
 
 # The essay to summarize:
 """
+# Skills
+academics_searcher_skill = """
+Searching essay inside the research essay database and get the summary of the essays. 
+Title and doi of the essay is shown in answer if this tool is used.
+If you use the information that comes from essays from the answer of this agent, you have to add title and doi reference of the essays in your answer also. """

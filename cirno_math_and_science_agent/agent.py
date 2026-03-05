@@ -69,7 +69,7 @@ class agent():
 if __name__=="__main__":
     logger_config.setup_logging()
     Agent = agent()
-    iterer = Agent.streaming(query="Find me the info about machin learning for drug discovery", context_id = "114514")
+    iterer = Agent.streaming(query="Solve $$2^x=114514$$", context_id = "114514")
     async def itering():
         async for i in iterer:
             if(i.step=="model" or i.step=="finish"):

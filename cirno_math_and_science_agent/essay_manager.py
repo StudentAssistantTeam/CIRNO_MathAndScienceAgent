@@ -106,8 +106,11 @@ class essay_downloader:
         return self.temp_file.name
     # Delete temp file
     def delete(self):
-        logger.info(f"Start deleting file {self.temp_file.name}")
-        os.unlink(self.temp_file.name)
+        try:
+            logger.info(f"Start deleting file {self.temp_file.name}")
+            os.unlink(self.temp_file.name)
+        except Exception as e:
+            logger.error(f"Delete file {self.temp_file.name} failed due to {e}")
     # Download
     async def download(self):
         params = {

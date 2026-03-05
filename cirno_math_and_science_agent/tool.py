@@ -72,7 +72,7 @@ async def academics_searcher(query:str) -> str:
     # Return
     return "result of searching for essays: " + "".join(
         [
-            f"\n\nEssay No.{idx}: {result['title']}\n\ndoi: {result["doi"]}\n\nShort Summary: \n\n{result["summary"]}"
+            f"\n\nResult No.{idx+1}:\n\nTitle: {result['title']}\n\ndoi: {result["doi"]}\n\nShort Summary: \n\n{result["summary"]}"
             for idx, result in enumerate(processed_list)
         ]
     )
