@@ -15,9 +15,9 @@ def main():
     skill_info_searching = AgentSkill(
         id="info_searching",
         name="STEM Info Searching Tool",
-        description="Searching information or data about science, math, engineering, history or geology. And carry out calculation. ",
+        description="Searching information or data about science, math, engineering, history or geology, and carry out calculations. ",
         tags=["information", "data"],
-        examples=["Give me some information about jupiter.", "Find me some information about France.", ]
+        examples=["Give me some information about jupiter.", "Find me some information about France.", "Solve $$2^x=114514$$"]
     )
     skill_academics_searching = AgentSkill(
         id="academics_searching",

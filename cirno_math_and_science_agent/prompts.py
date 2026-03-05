@@ -1,6 +1,6 @@
 # The prompts for the tools.
 math_and_science_searcher_queries_input_description = """
-This field is a list of different queries you want to search in the wolfram science knowledge base, follow the following rules: 
+This field is a list of different queries you want to search in the wolfram science knowledge base or calculations that you want to carry out, follow the following rules: 
 1. Send queries in English only; translate non-English queries before sending, then respond in the original language.
 2. ALWAYS use this exponent notation: `6*10^14`, NEVER `6e14`
 3. ALWAYS use proper Markdown formatting for all math, scientific, and chemical formulas, symbols, etc.:  '$$\n[expression]\n$$' for standalone cases and '\( [expression] \)' when inline.
