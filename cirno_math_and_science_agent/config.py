@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     llm_model_name:str = ""
     llm_base_url:str = ""
     llm_api_key:str = ""
+    llm_provider:str = ""
     # Wolfram Setting
     wolfram_app_id:str = ""
     # OpenAlex Setting

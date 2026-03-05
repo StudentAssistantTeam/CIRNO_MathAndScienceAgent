@@ -20,4 +20,4 @@ def main():
 def run():
     logger_config.setup_logging()
     logger.info("Entering main process ...")
-    main()
+    main

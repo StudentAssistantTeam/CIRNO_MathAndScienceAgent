@@ -81,7 +81,7 @@ async def request_llm4summary(pages, title: str):
     try:
         # Get response from the llm
         response = await litellm.acompletion(
-            model=settings.llm_model_name,
+            model=f"{settings.llm_provider}/{settings.llm_model_name}",
             base_url=settings.llm_base_url,
             api_key=settings.llm_api_key,
             messages=[{

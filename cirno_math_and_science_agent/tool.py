@@ -2,7 +2,7 @@ from langchain.tools import tool
 import asyncio
 from cirno_math_and_science_agent.essay_manager import (
     get_essay_info,
-    essay_downloader
+    essay_processor
 )
 from cirno_math_and_science_agent.request_wolfram import get_answer
 from cirno_math_and_science_agent.data_models import *
@@ -55,3 +55,24 @@ async def academics_searcher(query:str) -> str:
                 succeed_list.append(tmp)
     # Processed list
     processed_list = []
+    async def get_essay_summary(info_dict):
+        processor = essay_processor(doi=info_dict["doi"], id=info_dict["id"], essay_name=info_dict["title"])
+        # Download the essay file
+        await processor.download()
+        summary = await processor.get_summary()
+        if summary["success"]:
+            tmp_dict = {}
+            tmp_dict["doi"] = summary["doi"]
+            tmp_dict["title"] = summary["essay_name"]
+            tmp_dict["summary"] = summary["summary"]
+            processed_list.append(tmp_dict)
+    # Gather the tasks and execute
+    tasks = [get_essay_summary(i) for i in succeed_list]
+    await asyncio.gather(*tasks)
+    # Return
+    return "result of searching for essays: " + "".join(
+        [
+            f"\n\nEssay No.{idx}: {result['title']}\n\ndoi: {result["doi"]}\n\nShort Summary: \n\n{result["summary"]}"
+            for idx, result in enumerate(processed_list)
+        ]
+    )
