@@ -13,7 +13,11 @@ from collections.abc import AsyncGenerator
 import logging
 
 logger = logging.getLogger("agent")
-#Agent setting
+# Supported content types to get inputted or outputted by the model
+SUPPORTED_CONTENT_TYPES = ['text', 'text/plain']
+
+
+# Agent setting
 class agent():
     def __init__(self):
         # LLM
@@ -27,6 +31,7 @@ class agent():
                  academics_searcher]
         # agent
         self.agent = create_agent(self.llm, tools)
+
     def test_invoke(self, prompt):
         logger.info("Start requesting...")
         messages = [SystemMessage(content=system_prompt)]
@@ -34,7 +39,9 @@ class agent():
         message = {"messages": messages}
         result = asyncio.run(self.agent.ainvoke(message))
         return result
+
     async def streaming(self, query: str, context_id: str) -> AsyncGenerator[StreamingMessage, None]:
+        logger.info("Start streaming...")
         try:
             # Configuration
             config = {'configurable': {'thread_id': context_id}}
@@ -46,17 +53,17 @@ class agent():
             # Streaming Response
             async for chunk in self.agent.astream(message, config=config):
                 for step, data in chunk.items():
-                    if(step=="model"):
+                    if (step == "model"):
                         messages_recorded.append(data['messages'][0].content)
                     yield StreamingMessage(
-                        step = step,
-                        content = data['messages'][0].content,
+                        step=step,
+                        content=data['messages'][0].content,
                         done=False
                     )
             yield StreamingMessage(
-                step = "finish",
-                content = messages_recorded[len(messages_recorded)-1],
-                done = True
+                step="finish",
+                content=messages_recorded[len(messages_recorded) - 1],
+                done=True
             )
         except Exception as e:
             logger.error(f"An error occurred due to {e}")
@@ -66,12 +73,17 @@ class agent():
                 done=True
             )
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     logger_config.setup_logging()
     Agent = agent()
-    iterer = Agent.streaming(query="Get dy/dx of $$2^x=y$$", context_id = "114514")
+    iterer = Agent.streaming(query="Get dy/dx of $$2^x=y$$", context_id="114514")
+
+
     async def itering():
         async for i in iterer:
-            if(i.step=="model" or i.step=="finish"):
+            if (i.step == "model" or i.step == "finish"):
                 print(i.content)
+
+
     asyncio.run(itering())

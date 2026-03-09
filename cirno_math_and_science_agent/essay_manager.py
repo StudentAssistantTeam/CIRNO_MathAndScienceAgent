@@ -10,6 +10,8 @@ import os
 import asyncio
 
 logger = logging.getLogger("essay_manager")
+
+
 # Load PDF
 def load_pdf(path: str):
     # load pdf through fitz
@@ -20,21 +22,25 @@ def load_pdf(path: str):
         pages.append(page.get_text())
     loader.close()
     return pages
+
+
 # Get work id
 def get_work_id(url: str):
     match = re.search(r"https://openalex\.org/(W\d+)", url)
     if match:
         work_id = match.group(1)
         return work_id
+
+
 # Essay info searching
 async def get_essay_info(query: str, number: int):
     # Request params
     params = {
         "api_key": settings.openalex_api,
         "search": query,
-        "page":1,
-        "per-page":number,
-        "filter":"has_content.pdf:true"
+        "page": 1,
+        "per-page": number,
+        "filter": "has_content.pdf:true"
     }
     url = "https://api.openalex.org/works"
     try:
@@ -42,7 +48,7 @@ async def get_essay_info(query: str, number: int):
         results = []
         async with httpx.AsyncClient() as client:
             response = await client.get(url=url, params=params, timeout=60)
-            if response.status_code==200:
+            if response.status_code == 200:
                 logger.info("Request successful")
                 response_json = response.json()
                 result = response_json["results"]
@@ -76,6 +82,8 @@ async def get_essay_info(query: str, number: int):
             "success": False,
             "error": f"search failed due to {e}"
         }
+
+
 # Request LLM for essay summary
 async def request_llm4summary(pages, title: str):
     try:
@@ -86,8 +94,8 @@ async def request_llm4summary(pages, title: str):
             api_key=settings.llm_api_key,
             messages=[{
                 "role": "user",
-                "content":summarize_prompt+f"\n## {title}\n"+"".join([
-                    f"\n\n**=====Page{i+1}=====**\n\n{content}" for i,content in enumerate(pages)
+                "content": summarize_prompt + f"\n## {title}\n" + "".join([
+                    f"\n\n**=====Page{i + 1}=====**\n\n{content}" for i, content in enumerate(pages)
                 ])
             }]
         )
@@ -95,15 +103,19 @@ async def request_llm4summary(pages, title: str):
         logger.error(f"Request failed due to {e}")
         response = f"Cannot get this response due to {e}, try again later!"
     return response
+
+
 # Essay downloader
 class essay_downloader:
     # Initialize the downloader: Get file id
     def __init__(self, file_id: str):
         self.id = file_id
         self.temp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+
     # Get file name
     def get_name(self):
         return self.temp_file.name
+
     # Delete temp file
     def delete(self):
         try:
@@ -111,6 +123,7 @@ class essay_downloader:
             os.unlink(self.temp_file.name)
         except Exception as e:
             logger.error(f"Delete file {self.temp_file.name} failed due to {e}")
+
     # Download
     async def download(self):
         params = {
@@ -143,6 +156,8 @@ class essay_downloader:
                     "success": False,
                     "reason": f"Download failed due to {e}"
                 }
+
+
 # Essay processor
 class essay_processor:
     def __init__(self, doi: str, id: str, essay_name: str):
@@ -151,14 +166,16 @@ class essay_processor:
         self.downloader = essay_downloader(id)
         self.downloaded = False
         self.id = id
+
     # Download
     async def download(self):
         result = await self.downloader.download()
-        if(result["success"]):
+        if (result["success"]):
             self.downloaded = True
         return result
+
     # Get summary
-    async def get_summary(self, remove_tmp_file:bool = True):
+    async def get_summary(self, remove_tmp_file: bool = True):
         # Check whether the file is downloaded
         if not self.downloaded:
             return {
@@ -168,14 +185,16 @@ class essay_processor:
         else:
             try:
                 loop = asyncio.get_event_loop()
+
                 # reader
                 def pdf_reader():
                     return load_pdf(self.downloader.get_name())
+
                 results = await loop.run_in_executor(None, pdf_reader)
                 # Summarize
                 summary = await request_llm4summary(pages=results, title=self.essay_name)
                 # Remove temp files to save spaces.
-                if(remove_tmp_file):
+                if (remove_tmp_file):
                     await loop.run_in_executor(None, self.downloader.delete)
                 return {
                     "success": True,

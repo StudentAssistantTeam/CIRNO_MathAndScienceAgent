@@ -11,7 +11,7 @@ This field is a list of different queries you want to search in the wolfram scie
 8. For the information you get from this tool, you do not need to add the source of the information. 
 """
 math_and_science_searcher_description = """
-The tool that allows you to search for information in science, math, engineering, history or geology. 
+The tool that allows you to search for information in science, math, engineering, economics, history or geology. 
 Also, you are allowed to carry out calculations here. 
 **Real-time data can be provided here.**
 """

@@ -16,13 +16,16 @@ from a2a.types import (
 import logging
 
 logger = logging.getLogger("Agent Executor")
+
+
 # Agent Executor
 class agent_executor(AgentExecutor):
     def __init__(self):
         self.agent = agent()
+
     # Agent execute
     async def execute(
-        self, context: RequestContext, event_queue: EventQueue
+            self, context: RequestContext, event_queue: EventQueue
     ) -> None:
         # Getting query
         query = context.get_user_input()
@@ -59,8 +62,9 @@ class agent_executor(AgentExecutor):
             # Error handling
             logger.error(f"Error occured due to {e}")
             raise ServerError(error=InternalError()) from e
+
     # Cancel transmission. It cannot be realized due to the problem with langchain.
     async def cancel(
-        self, context: RequestContext, event_queue: EventQueue
+            self, context: RequestContext, event_queue: EventQueue
     ) -> None:
         raise ServerError(error=UnsupportedOperationError())
