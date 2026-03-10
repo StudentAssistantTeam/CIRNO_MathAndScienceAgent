@@ -6,7 +6,11 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from cirno_math_and_science_agent.config import settings
 from cirno_math_and_science_agent.data_models import StreamingMessage
 from cirno_math_and_science_agent.prompts import system_prompt
-from cirno_math_and_science_agent.tool import *
+from cirno_math_and_science_agent.tool import (
+    search_math_and_science_info,
+    academics_searcher,
+    final_answer
+)
 from cirno_math_and_science_agent import logger_config
 import asyncio
 from collections.abc import AsyncGenerator
@@ -28,7 +32,8 @@ class agent():
         )
         # tools preparation
         tools = [search_math_and_science_info,
-                 academics_searcher]
+                 academics_searcher,
+                 final_answer]
         # agent
         self.agent = create_agent(self.llm, tools)
 
@@ -77,12 +82,13 @@ class agent():
 if __name__ == "__main__":
     logger_config.setup_logging()
     Agent = agent()
-    iterer = Agent.streaming(query="Get dy/dx of $$2^x=y$$", context_id="114514")
+    iterer = Agent.streaming(query="Find me the information about France.", context_id="114514")
 
 
     async def itering():
         async for i in iterer:
             if (i.step == "model" or i.step == "finish"):
+                print(i.done)
                 print(i.content)
 
 

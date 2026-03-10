@@ -5,12 +5,17 @@ from cirno_math_and_science_agent.essay_manager import (
     essay_processor
 )
 from cirno_math_and_science_agent.request_wolfram import get_answer
-from cirno_math_and_science_agent.data_models import *
+from cirno_math_and_science_agent.data_models import (
+    WolframInputs,
+    AcademicsSearcherInput
+)
 from cirno_math_and_science_agent.prompts import (
     math_and_science_searcher_description,
-    academics_searcher_description
+    academics_searcher_description,
+    final_answer_description
 )
 import logging
+from typing import List
 
 logger = logging.getLogger("Tools")
 
@@ -83,3 +88,9 @@ async def academics_searcher(query: str) -> str:
             for idx, result in enumerate(processed_list)
         ]
     )
+
+
+# Get final answer.
+@tool("final_answer", description=final_answer_description)
+async def final_answer() -> None:
+    return None
