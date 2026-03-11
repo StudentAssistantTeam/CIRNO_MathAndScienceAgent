@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     # a2a config
     a2a_port: str = ""
     a2a_host: str = ""
+    use_db_push_notifications: bool = False
+    db_url: str = ""
     # LLM setting
     llm_model_name: str = ""
     llm_base_url: str = ""

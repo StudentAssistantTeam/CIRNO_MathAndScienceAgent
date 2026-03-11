@@ -10,6 +10,11 @@ from a2a.types import (
     AgentCard,
     AgentCapabilities
 )
+from a2a.server.tasks import (
+    InMemoryPushNotificationConfigStore,
+    DatabasePushNotificationConfigStore,
+    BasePushNotificationSender
+)
 # Other dependencies
 import logging
 import httpx
@@ -50,6 +55,19 @@ def main():
         default_output_modes=SUPPORTED_CONTENT_TYPES,
         capabilities=capabilities,
         skills=[skill_info_searching, skill_academics_searching]
+    )
+    # Server
+    httpx_client = httpx.AsyncClient()
+    # Configuring the push notification system
+    if settings.use_db_push_notifications:
+        push_config_store = DatabasePushNotificationConfigStore(
+            settings.db_url
+        )
+    else:
+        push_config_store = InMemoryPushNotificationConfigStore()
+    push_sender = BasePushNotificationSender(
+        httpx_client=httpx_client,
+        config_store=push_config_store
     )
 
 
