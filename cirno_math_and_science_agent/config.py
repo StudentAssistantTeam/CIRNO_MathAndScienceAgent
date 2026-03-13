@@ -8,9 +8,10 @@ ENV_FILE_PATH = BASE_DIR / "cirno_math_and_science_agent.env"
 # Settings
 class Settings(BaseSettings):
     # a2a config
-    a2a_port: str = ""
+    a2a_port: int = 4000
     a2a_host: str = ""
     use_db_push_notifications: bool = False
+    use_db_task_store: bool = False
     db_url: str = ""
     # LLM setting
     llm_model_name: str = ""

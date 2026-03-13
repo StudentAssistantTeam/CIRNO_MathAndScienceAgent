@@ -3,6 +3,7 @@ from cirno_math_and_science_agent.config import settings
 import cirno_math_and_science_agent.logger_config as logger_config
 from cirno_math_and_science_agent.prompts import academics_searcher_skill
 from cirno_math_and_science_agent.agent import SUPPORTED_CONTENT_TYPES
+from cirno_math_and_science_agent.agent_executor import agent_executor
 # a2a
 from a2a.server.apps import A2AStarletteApplication
 from a2a.types import (
@@ -13,12 +14,17 @@ from a2a.types import (
 from a2a.server.tasks import (
     InMemoryPushNotificationConfigStore,
     DatabasePushNotificationConfigStore,
-    BasePushNotificationSender
+    BasePushNotificationSender,
+    InMemoryTaskStore,
+    DatabaseTaskStore
 )
+from a2a.server.request_handlers import DefaultRequestHandler
 # Other dependencies
 import logging
 import httpx
+import uvicorn
 
+# Logger setting
 logger = logging.getLogger("Server")
 
 
@@ -69,6 +75,28 @@ def main():
         httpx_client=httpx_client,
         config_store=push_config_store
     )
+    # Configure the tasks store system
+    if settings.use_db_task_store:
+        task_store = DatabaseTaskStore(settings.db_url)
+    else:
+        task_store = InMemoryTaskStore()
+    request_handler = DefaultRequestHandler(
+        agent_executor=agent_executor(),
+        task_store=task_store,
+        push_config_store=push_config_store,
+        push_sender=push_sender
+    )
+    # Server configuration
+    server = A2AStarletteApplication(
+        agent_card=agent_card,
+        http_handler=request_handler
+    )
+    # Start the server
+    uvicorn.run(
+        server.build(),
+        host=settings.a2a_host,
+        port=settings.a2a_port
+    )
 
 
 # Entry point
@@ -76,3 +104,8 @@ def run():
     logger_config.setup_logging()
     logger.info("Entering main process ...")
     main()
+
+
+# Start server
+if __name__ == "__main__":
+    run()
