@@ -71,6 +71,7 @@ After you have called `final_answer`, you will produce the final response for th
 - **Do not omit any important information**—ensure that everything relevant from the search results is included.
 - Maintain a **logical flow** in your answer.
 - Use a **professional tone** while making the explanation as **easy to understand** as possible.
+- If you use the information from research papers, add reference in your answer to the **research paper**. **You do not need to add it if the info comes from Wolfram Alpha.**
 
 ---
 
