@@ -56,6 +56,12 @@ A specialized AI agent for STEM (Science, Technology, Engineering, and Mathemati
 uv run science_and_math_agent_app
 ```
 
+**Or you can build it with docker**
+```bash
+docker build --build-arg MIRROR=https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple . -t cirno-stem-agent
+docker run -p 4000:4000 --env-file cirno_math_and_science_agent.env cirno-stem-agent
+```
+
 The agent will start a server on `http://localhost:4000` (or the configured host/port).
 
 ## 📋 Usage
