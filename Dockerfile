@@ -1,5 +1,5 @@
 # python server
-FROM docker.xuanyuan.me/python:3.13
+FROM python:3.13
 
 # Docker Arg
 ARG MIRROR
