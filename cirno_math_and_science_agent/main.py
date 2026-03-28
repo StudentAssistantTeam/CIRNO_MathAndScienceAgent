@@ -26,6 +26,7 @@ import uvicorn
 
 # Logger setting
 logger = logging.getLogger("Server")
+executor = agent_executor()
 
 
 def main():
@@ -81,7 +82,7 @@ def main():
     else:
         task_store = InMemoryTaskStore()
     request_handler = DefaultRequestHandler(
-        agent_executor=agent_executor(),
+        agent_executor=executor,
         task_store=task_store,
         push_config_store=push_config_store,
         push_sender=push_sender

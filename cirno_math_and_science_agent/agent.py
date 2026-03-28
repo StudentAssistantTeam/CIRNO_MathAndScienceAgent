@@ -20,6 +20,8 @@ import logging
 logger = logging.getLogger("agent")
 # Supported content types to get inputted or outputted by the model
 SUPPORTED_CONTENT_TYPES = ['text', 'text/plain']
+# Memory
+memory = MemorySaver()
 
 
 # Agent setting
@@ -35,13 +37,11 @@ class agent():
         tools = [search_math_and_science_info,
                  academics_searcher,
                  final_answer]
-        # memory setting
-        self.memory = MemorySaver()
         # agent
         self.agent = create_agent(
             self.llm,
             tools,
-            checkpointer=self.memory,
+            checkpointer=memory,
             system_prompt=system_prompt
         )
 
@@ -62,20 +62,20 @@ class agent():
             messages = []
             messages.append(HumanMessage(content=query))
             message = {"messages": messages}
-            messages_recorded = []
+            final_content = ""
             # Streaming Response
             async for chunk in self.agent.astream(message, config=config):
                 for step, data in chunk.items():
                     if (step == "model"):
-                        messages_recorded.append(data['messages'][0].content)
+                        final_content = data['messages'][-1].content
                     yield StreamingMessage(
                         step=step,
-                        content=data['messages'][0].content,
+                        content=data['messages'][-1].content,
                         done=False
                     )
             yield StreamingMessage(
                 step="finish",
-                content=messages_recorded[len(messages_recorded) - 1],
+                content=final_content,
                 done=True
             )
         except Exception as e:
