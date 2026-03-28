@@ -48,6 +48,15 @@ def main():
         examples=["Show me the researches about machine learning for drug discovery",
                   "Show me about the definition of Quantum Physics. "]
     )
+    multiple_questions_understanding = AgentSkill(
+        id="multiple_questions_understanding",
+        name="Multiple Questions Understanding Ability",
+        description="This agent is able to understand complex questions",
+        tags=["information", "questions"],
+        examples=[
+            "What is gravity and how does it affect our lives?"
+        ]
+    )
     # Agent Capabilities
     capabilities = AgentCapabilities(
         streaming=True
@@ -55,13 +64,19 @@ def main():
     # Defining Agent Card
     agent_card = AgentCard(
         name="stem_agent",
-        description="Expert in science, math, engineering, economics, history or geology",
+        description="""
+        Expert in science, math, engineering, economics, history or geology.
+        """,
         url=f"http://{settings.a2a_host}:{settings.a2a_port}/",
         version="0.1.0",
         default_input_modes=SUPPORTED_CONTENT_TYPES,
         default_output_modes=SUPPORTED_CONTENT_TYPES,
         capabilities=capabilities,
-        skills=[skill_info_searching, skill_academics_searching]
+        skills=[
+            skill_info_searching,
+            skill_academics_searching,
+            multiple_questions_understanding,
+        ]
     )
     # Server
     httpx_client = httpx.AsyncClient()
