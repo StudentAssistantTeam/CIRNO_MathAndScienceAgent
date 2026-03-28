@@ -1,7 +1,8 @@
 # langchain
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import HumanMessage
+from langgraph.checkpoint.memory import MemorySaver
 # Project dependencies
 from cirno_math_and_science_agent.config import settings
 from cirno_math_and_science_agent.data_models import StreamingMessage
@@ -34,12 +35,19 @@ class agent():
         tools = [search_math_and_science_info,
                  academics_searcher,
                  final_answer]
+        # memory setting
+        self.memory = MemorySaver()
         # agent
-        self.agent = create_agent(self.llm, tools)
+        self.agent = create_agent(
+            self.llm,
+            tools,
+            checkpointer=self.memory,
+            system_prompt=system_prompt
+        )
 
     def test_invoke(self, prompt):
         logger.info("Start requesting...")
-        messages = [SystemMessage(content=system_prompt)]
+        messages = []
         messages.append(HumanMessage(prompt))
         message = {"messages": messages}
         result = asyncio.run(self.agent.ainvoke(message))
@@ -51,7 +59,7 @@ class agent():
             # Configuration
             config = {'configurable': {'thread_id': context_id}}
             # Setting messages
-            messages = [SystemMessage(content=system_prompt)]
+            messages = []
             messages.append(HumanMessage(content=query))
             message = {"messages": messages}
             messages_recorded = []
