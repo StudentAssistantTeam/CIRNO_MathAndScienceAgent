@@ -65,10 +65,10 @@ class agent():
             async for chunk in self.agent.astream(message, config=config):
                 for step, data in chunk.items():
                     if (step == "model"):
-                        final_content = data['messages'][-1].content
+                        final_content = data['messages'][0].content
                     yield StreamingMessage(
                         step=step,
-                        content=data['messages'][-1].content,
+                        content=data['messages'][0].content,
                         done=False
                     )
             yield StreamingMessage(

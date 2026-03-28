@@ -66,6 +66,7 @@ def main():
         name="stem_agent",
         description="""
         Expert in science, math, engineering, economics, history or geology.
+        Note that you should only ask questions about facts (e.g. 'Definition of atoms for grade 9 students' is not appropriate, directly ask it the definition of atoms instead.)
         """,
         url=f"http://{settings.a2a_host}:{settings.a2a_port}/",
         version="0.1.0",
