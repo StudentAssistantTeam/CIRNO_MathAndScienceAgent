@@ -53,7 +53,7 @@ def main():
     )
     # Defining Agent Card
     agent_card = AgentCard(
-        name="STEM Agent",
+        name="stem_agent",
         description="Expert in science, math, engineering, economics, history or geology",
         url=f"http://{settings.a2a_host}:{settings.a2a_port}/",
         version="0.1.0",
