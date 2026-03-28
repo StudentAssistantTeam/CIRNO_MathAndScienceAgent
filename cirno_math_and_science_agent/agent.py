@@ -20,8 +20,6 @@ import logging
 logger = logging.getLogger("agent")
 # Supported content types to get inputted or outputted by the model
 SUPPORTED_CONTENT_TYPES = ['text', 'text/plain']
-# Memory
-memory = MemorySaver()
 
 
 # Agent setting
@@ -41,7 +39,7 @@ class agent():
         self.agent = create_agent(
             self.llm,
             tools,
-            checkpointer=memory,
+            checkpointer=MemorySaver(),
             system_prompt=system_prompt
         )
 
