@@ -362,7 +362,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=1.2.8" },
     { name = "langchain-openai", specifier = ">=1.1.7" },
     { name = "langgraph", specifier = ">=1.0.7" },
-    { name = "litellm", specifier = ">=1.81.16" },
+    { name = "litellm", specifier = "==1.81.16" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "pymupdf", specifier = ">=1.27.1" },

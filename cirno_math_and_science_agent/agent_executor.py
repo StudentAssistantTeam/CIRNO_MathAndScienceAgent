@@ -43,11 +43,10 @@ class agent_executor(AgentExecutor):
             async for chunk in self.agent.streaming(query, task.context_id):
                 # Checking whether the agent return the final answer.
                 is_done = chunk.done
-                # step
-                if chunk.step != "model":
-                    continue
                 # Updating task
                 if not is_done:
+                    if chunk.step != "model":
+                        continue
                     await updater.update_status(
                         TaskState.working,
                         new_agent_text_message(

@@ -64,7 +64,7 @@ class agent():
             # Streaming Response
             async for chunk in self.agent.astream(message, config=config):
                 for step, data in chunk.items():
-                    if (step == "model"):
+                    if step == "model":
                         final_content = data['messages'][0].content
                     yield StreamingMessage(
                         step=step,
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     async def itering():
         async for i in iterer:
             if (i.step == "model" or i.step == "finish"):
-                print(i.done)
+                print(i.step)
                 print(i.content)
 
 
