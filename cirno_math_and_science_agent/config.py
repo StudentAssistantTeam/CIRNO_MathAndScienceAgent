@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     db_url: str = ""
     # LLM setting
     llm_model_name: str = ""
+    llm_lite_model_name: str = ""
     llm_base_url: str = ""
     llm_api_key: str = ""
     llm_provider: str = ""
